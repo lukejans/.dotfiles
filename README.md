@@ -10,15 +10,15 @@ Running the below command in your terminal will execute the [setup.sh](./setup.s
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh)"
 ```
 
-This script will confirm you want to proceed with the install before doing anything. If you confirm it will attempt to download and install/upgrade the following:
+This script will confirm you want to proceed with the install before doing anything. If you confirm it will attempt to do the following:
 
-- 🛠️ Xcode command line tools
-- 🍺 Homebrew & programs listed inside of [Brewfile](./Brewfile)
-- 😊 This repo to `$HOME/.dotfiles`
+- 🛠️ Install Xcode command line tools
+- 🍺 Install Homebrew & programs listed inside of [Brewfile](./Brewfile)
+- 😊 Download This repo to `$HOME/.dotfiles`
 - 🔗 Symlink config files to `$HOME` and `$HOME/.config`
 - 🌱 Setup a Node.js environment (v22.xx.x), (`nvm`, `pnpm`)
 - 📦 Install some npm packages
-- ✨ Set some system settings
+- ✨ Set some MacOS system settings
 
 ## ⚠️ Warnings 
 

@@ -142,10 +142,10 @@ else
   echo "nvm is already installed."
 fi
 
+# --- nvm
 # load nvm without restarting the shell
 export NVM_DIR="$HOME/.nvm"
 \. "$NVM_DIR/nvm.sh"
-
 # check if we have Node.js v22 installed
 if ! nvm ls 22 | grep -q "v22"; then
   echo "Installing Node.js v22..."
@@ -153,7 +153,6 @@ if ! nvm ls 22 | grep -q "v22"; then
 else
   echo "Node.js v22 is already installed."
 fi
-
 # make sure v22 is the default
 if [[ "$(nvm current)" != "v22"* ]]; then
   echo "Setting Node.js v22 as default..."
@@ -161,27 +160,32 @@ if [[ "$(nvm current)" != "v22"* ]]; then
   nvm use 22
 fi
 
-# enable and prepare pnpm via corepack
-if ! command -v pnpm &>/dev/null; then
-  echo "Setting up pnpm via corepack..."
-  corepack enable
-  corepack prepare pnpm@latest --activate
+# --- pnpm
+# enable pnpm via corepack
+echo "Setting up pnpm via corepack..."
+corepack enable
+corepack prepare pnpm@latest --activate
+# setup pnpm home directory if not set
+if [[ -z "${PNPM_HOME:-}" ]]; then
+  echo "Setting up PNPM_HOME environment variable..."
+  export PNPM_HOME="/Users/lukejans/Library/pnpm"
+  case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+  esac
 else
-  # update pnpm if it's already installed
-  echo "Updating pnpm to latest version..."
-  corepack prepare pnpm@latest --activate
+  echo "PNPM_HOME is already configured."
 fi
+# install global packages with pnpm
+echo "Installing global Node.js packages..."
+pnpm add --global "live-server"
+pnpm add --global "prettier"
+pnpm add --global "eslint"
 
 echo "Node.js environment:"
 echo "  - nvm version: $(nvm -v)"
 echo "  - node version: $(node -v)"
 echo "  - pnpm version: $(pnpm -v)"
-
-# install global npm packages
-echo "Installing global Node.js packages..."
-pnpm add --global "live-server"
-pnpm add --global "prettier"
-pnpm add --global "eslint"
 
 # --- apply macOS preferences
 echo -e "${GREEN}->${RESET} Applying macOS preferences..."

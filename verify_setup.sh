@@ -1,41 +1,36 @@
 #!/usr/bin/env bash
 
-# verify setup.sh SHA256 hash against the one on github
-#
+# exit on error, unset variables, and pipe failures
+set -euo pipefail
+
 # -- lukejans verify_setup.sh
 
-# create a temporary file
-SETUP_SCRIPT=$(mktemp)
+# remove the temporary file on any exit
+trap 'rm -f "$SETUP_SCRIPT"' EXIT
 
-# download the script
+# download the script into a temporary file
 echo "Downloading setup script..."
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh -o "$SETUP_SCRIPT"
+SETUP_SCRIPT=$(mktemp)
+curl -fsSL "https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh" -o "$SETUP_SCRIPT"
 
-# get the SHA256 hash of the file from github
-echo "Verifying file integrity..."
-GITHUB_SHA=$(curl -s https://api.github.com/repos/lukejans/dotfiles/contents/setup.sh |
-  grep sha | head -1 |
-  sed 's/.*: "\(.*\)",/\1/' |
-  xargs -I {} echo {} |
-  base64 --decode |
-  shasum -a 256 |
-  cut -d ' ' -f1)
+echo "Calculating SHA256 hashes..."
+# hash of the remote file, fetched fresh
+REMOTE_SHA=$(curl -fsSL "https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh" |
+  sha256sum | awk '{print $1}')
+# hash of the downloaded file
+LOCAL_SHA=$(sha256sum "$SETUP_SCRIPT" | awk '{print $1}')
 
-# calculate the hash of the downloaded file
-LOCAL_SHA=$(shasum -a 256 "$SETUP_SCRIPT" | cut -d ' ' -f1)
+echo "Remote SHA256: $REMOTE_SHA"
+echo "Local  SHA256: $LOCAL_SHA"
 
-# compare the hashes
-if [ "$GITHUB_SHA" = "$LOCAL_SHA" ]; then
-  # execute the setup script after verification
-  echo "File integrity verified! Executing setup script..."
+if [ "$REMOTE_SHA" = "$LOCAL_SHA" ]; then
+  echo -e "\033[1;32m✔\033[0m File integrity verified! Executing setup script…"
   echo
   bash "$SETUP_SCRIPT"
 else
-  echo -e "\033[1;31mERROR:\033[0m Downloaded file does not match the original on GitHub."
-  echo "This could be due to a network error or tampering."
-  echo -e "Download hash: \033[1;36m${LOCAL_SHA}\033[0m"
-  echo -e "Expected hash: \033[1;36m${GITHUB_SHA}\033[0m"
+  echo -e "\033[1;31m✘ ERROR:\033[0m Hash mismatch—aborting!"
+  echo "This could be a network hiccup or tampering."
+  echo "Download hash: $LOCAL_SHA"
+  echo "Expected hash: $REMOTE_SHA"
+  exit 1
 fi
-
-# clean up
-rm "$SETUP_SCRIPT"

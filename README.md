@@ -1,13 +1,13 @@
 # Dotfiles
 
-> My personal MacOS setup
+> My MacOS setup
 
 ## Install
 
-Running the below command in your terminal will execute the [setup.sh](./setup.sh) install script. 
+Running the below command in your terminal will execute the [setup.sh](./setup.sh) install script.
 
 ```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh)"
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh | bash
 ```
 
 This script will confirm you want to proceed with the install before doing anything. If you confirm it will attempt to do the following:
@@ -20,9 +20,9 @@ This script will confirm you want to proceed with the install before doing anyth
 - 📦 Install some npm packages
 - ✨ Set some MacOS system settings
 
-## ⚠️ Warnings 
+## ⚠️ Warnings
 
-> **Run at your own risk! I do not take responsability for any data loss or other issues related to using this install script.**
+> **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
 
 - Use only on apple silicon Macs as I have not added checks for different homebrew paths.
 - I create backups of configurations this script replaces but in some cases an old `.config.bak` may end up in `~/.Trash`

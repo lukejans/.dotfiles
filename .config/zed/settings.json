@@ -28,6 +28,10 @@
       // "enabled": true
     }
   },
+  // --- file associations
+  "file_types": {
+    "Shell Script": [".env.*", ".zprofile"]
+  },
   // --- ssh
   "ssh_connections": [],
   // --- text
@@ -126,18 +130,18 @@
       "language_servers": ["ruby-lsp", "!solargraph", "!rubocop"],
       "formatter": "language_server"
     },
-    // --- xml
+    // xml
     "XML": {
       "formatter": "prettier"
     },
-    // --- json
+    // json
     "JSON": {
       "formatter": "prettier"
     },
     "JSONC": {
       "formatter": "prettier"
     },
-    // --- java
+    // java
     "Java": {
       "formatter": "language_server",
       "code_actions_on_format": {
@@ -145,7 +149,7 @@
       }
     }
   },
-  // --- lsp ---
+  // --- lsp
   "lsp": {
     // js
     "eslint": {

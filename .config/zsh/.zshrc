@@ -103,6 +103,15 @@ load-nvmrc() {
 }
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
+# pnpm: performant node package manager
+#   - corepack enabled
+#   - see: https://pnpm.io
+#   - note: the guide on node.js downloads page was followed
+export PNPM_HOME="/Users/lukejans/Library/pnpm"
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 
 # --- java
 # -> openjdk (brew installed)

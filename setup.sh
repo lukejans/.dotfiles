@@ -12,7 +12,7 @@ CYAN="\033[1;36m"
 RESET="\033[0m"
 
 # print install banner
-echo ""
+echo
 echo -e "${GREEN}         .:'${RESET}"
 echo -e "${GREEN}     __ :'__${RESET}"
 echo -e "${YELLOW}  .'\`__\`-'__\`\`.${RESET}"
@@ -20,16 +20,19 @@ echo -e "${RED} :__________.-'${RESET}  Running lukejans'"
 echo -e "${MAGENTA} :_________:${RESET}        macOS setup"
 echo -e "${CYAN}  :_________\`-;${RESET}"
 echo -e "${RESET}   \`.__.-.__.'${RESET}"
-echo ""
+echo
 
 # confirm installation prompt
 echo "This script will: "
 echo "  - install additional software"
 echo "  - install lukejans' dotfiles"
 echo "  - setup your shell environment"
-echo ""
+echo
+
 read -p "Continue? (y/N) " -n 1 -r
-echo ""
+
+echo
+
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   echo "Installation aborted."
   exit 0
@@ -50,7 +53,7 @@ start_time=$(date +%s)
 
 # --- xcode command line tools
 if ! xcode-select -p &>/dev/null; then
-  echo "${GREEN}->${RESET} Installing Xcode command line tools..."
+  echo -e "${GREEN}->${RESET} Installing Xcode command line tools..."
   xcode-select --install
   # loop until the installer has actually put the tools on disk
   until xcode-select -p &>/dev/null; do
@@ -60,33 +63,33 @@ fi
 
 # --- homebrew
 if ! command -v brew &>/dev/null; then
-  echo "${GREEN}->${RESET} Installing \`\$ brew\`..."
+  echo -e "${GREEN}->${RESET} Installing \`\$ brew\`..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   # add Homebrew to PATH for the current session
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
   # install git immediately to clone the dotfiles repo
-  echo "${GREEN}->${RESET} Installing git..."
+  echo -e "${GREEN}->${RESET} Installing git..."
   brew install git
 fi
 
 # --- clone the most recent version of the .dotfiles repo
 DOTFILES_DIR="$HOME/.dotfiles"
 if [[ -d "$DOTFILES_DIR" ]]; then
-  echo "${GREEN}->${RESET} Dotfiles directory exists, updating..."
+  echo -e "${GREEN}->${RESET} Dotfiles directory exists, updating..."
   cd "$DOTFILES_DIR" && git pull
 else
-  echo "${GREEN}->${RESET} Downloading dotfiles repository..."
+  echo -e "${GREEN}->${RESET} Downloading dotfiles repository..."
   git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
 fi
 
 # --- install homebrew packages
-echo "${GREEN}->${RESET} Installing Homebrew packages from Brewfile..."
+echo -e "${GREEN}->${RESET} Installing Homebrew packages from Brewfile..."
 brew bundle --file "$DOTFILES_DIR/Brewfile"
 
 # --- symlink general configuration files
-echo "${GREEN}->${RESET} Linking \`.config\` directory..."
+echo -e "${GREEN}->${RESET} Linking \`.config\` directory..."
 # check if .config directory exists and is not a symlink
 if [[ -d "$HOME/.config" && ! -L "$HOME/.config" ]]; then
   echo "Backing up existing config directory to $HOME/.config.bak"
@@ -108,17 +111,17 @@ elif [[ -L "$HOME/.config" ]]; then
 fi
 # create the link for the entire `.config` directory
 ln -sf "$DOTFILES_DIR/.config" "$HOME/.config"
-echo "Linked \`.config\` directory to \`$HOME/.config\`"
+echo -e "Linked \`.config\` directory to \`$HOME/.config\`"
 
 # --- symlink zsh configuration files
-echo "${GREEN}->${RESET} Linking zsh configuration files..."
+echo -e "${GREEN}->${RESET} Linking zsh configuration files..."
 ln -sf "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.config/zsh/.zshenv" "$HOME/.zshenv"
 echo "Linked zsh configuration files"
 
 # --- node
 # see: https://nodejs.org/en/download
-echo "${GREEN}->${RESET} Setting up Node.js environment..."
+echo -e "${GREEN}->${RESET} Setting up Node.js environment..."
 # check and install nvm if needed
 if [[ ! -d "$HOME/.nvm" ]]; then
   echo "Installing nvm..."
@@ -178,22 +181,22 @@ install_if_missing "prettier"
 install_if_missing "eslint"
 
 # --- apply macOS preferences
-echo "${GREEN}->${RESET} Applying macOS preferences..."
+echo -e "${GREEN}->${RESET} Applying macOS preferences..."
 source "$DOTFILES_DIR/macos.sh"
 
 # --- add fonts to the font book
 if [ ! -d "$HOME/Library/Fonts" ]; then
-  echo "${GREEN}->${RESET} Creating user fonts directory..."
+  echo -e "${GREEN}->${RESET} Creating user fonts directory..."
   mkdir -p "$HOME/Library/Fonts"
 else
   echo "User fonts directory already exists."
-  echo "${GREEN}->${RESET} Adding fonts to the font book..."
+  echo -e "${GREEN}->${RESET} Adding fonts to the font book..."
   cp $DOTFILES_DIR/assets/fonts/*.ttf "$HOME/Library/Fonts/"
 fi
 
 # --- set zsh as default shell if it's not already
 if [[ "$SHELL" != *"zsh"* ]]; then
-  echo "${GREEN}->${RESET} Setting Zsh as default shell..."
+  echo -e "${GREEN}->${RESET} Setting Zsh as default shell..."
   chsh -s "$(command -v zsh)"
 fi
 
@@ -203,7 +206,7 @@ install_time=$((end_time - start_time))
 
 # --- installation complete info and restart prompt
 echo -e "\n${CYAN}Installation complete!${RESET}"
-echo "  - setup time: ${YELLOW}${install_time}s${RESET}"
+echo -e "  - setup time: ${YELLOW}${install_time}s${RESET}"
 echo "  - todo: add java versions to jenv"
 echo "  - system restart required"
 read -p "Restart your computer now? (y/N) " -n 1 -r

@@ -33,6 +33,11 @@ alias grep='grep --color=always'
 alias py='python3'
 alias pip='pip3'
 
+# java
+alias jinfo='echo -e "Java Binary Path: $(readlink -f "$(jenv which java)")\nJAVA_HOME: $JAVA_HOME"'
+alias jsweep='find . -name "*.class" -type f -exec trash {} \;'
+
+# because im used to neofetch
 alias neofetch='fastfetch'
 
 # macOS apple script shortcuts

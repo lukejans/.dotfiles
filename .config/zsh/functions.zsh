@@ -64,17 +64,6 @@ function gc() {
   fi
 }
 
-# get information on the Java version being used
-function java_info() {
-  echo "Java Binary Path: $(readlink -f "$(jenv which java)")"
-  echo "JAVA_HOME: $JAVA_HOME"
-}
-
-# clean compiled Java class files
-function java_sweep() {
-  find . -name "*.class" -type f -exec trash {} \;
-}
-
 # arduino uno compile
 function uno_compile() {
   arduino-cli compile -v --fqbn arduino:avr:uno "$1"

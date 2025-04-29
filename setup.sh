@@ -33,7 +33,7 @@ echo "  - install lukejans' dotfiles"
 echo "  - setup your shell environment"
 echo
 
-read -p "Continue? (y/N) " -n 1 -r
+read -p "Continue? (y/N) " -n 1 -r </dev/tty
 
 echo
 
@@ -221,7 +221,7 @@ echo -e "\n${CYAN}Installation complete!${RESET}"
 echo -e "  - setup time: ${YELLOW}${install_time}s${RESET}"
 echo "  - todo: add java versions to jenv"
 echo "  - system restart required"
-read -p "Restart your computer now? (y/N) " -n 1 -r
+read -p "Restart your computer now? (y/N) " -n 1 -r </dev/tty
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   # visual countdown

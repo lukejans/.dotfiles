@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# setup for MacOS
+#
+# -- lukejans setup.sh
+
 # exit on error
 set -e
 

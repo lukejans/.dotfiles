@@ -4,8 +4,8 @@
 #
 # -- lukejans setup.sh
 
-# exit on error
-set -e
+# exit on error, unset variables, and pipe failures
+set -euo pipefail
 
 # colors used
 GREEN="\033[1;32m"

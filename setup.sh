@@ -90,7 +90,7 @@ fi
 
 # --- install homebrew packages
 echo -e "${GREEN}->${RESET} Installing Homebrew packages from Brewfile..."
-brew bundle --file "$DOTFILES_DIR/Brewfile --verbose"
+brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
 
 # --- symlink general configuration files
 echo -e "${GREEN}->${RESET} Linking \`.config\` directory..."

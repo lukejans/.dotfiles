@@ -21,7 +21,7 @@
 
 ## Install
 
-Running the below command in your terminal will execute the [setup.sh](./setup.sh) install script.
+Running the below command in your terminal will execute the [`verify_setup.sh`](./verify_setup.sh) install script which will verify the integrity of [`setup.sh`](./setup.sh) before executing the installation commands.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/verify_setup.sh | bash

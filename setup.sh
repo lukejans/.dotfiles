@@ -119,8 +119,16 @@ echo -e "Linked \`.config\` directory to \`$HOME/.config\`"
 
 # --- symlink zsh configuration files
 echo -e "${GREEN}->${RESET} Linking zsh configuration files..."
+# Backup existing files if they're not symlinks
+for file in ".zshrc" ".zshenv" ".profile"; do
+  if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
+    echo "Backing up existing $file to $HOME/${file}.bak"
+    mv "$HOME/$file" "$HOME/${file}.bak"
+  fi
+done
 ln -sf "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.config/zsh/.zshenv" "$HOME/.zshenv"
+ln -sf "$DOTFILES_DIR/.config/shell/.profile" "$HOME/.profile"
 echo "Linked zsh configuration files"
 
 # --- node

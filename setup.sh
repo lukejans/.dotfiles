@@ -178,19 +178,10 @@ echo "  - node version: $(node -v)"
 echo "  - pnpm version: $(pnpm -v)"
 
 # install global npm packages
-install_if_missing() {
-  local package=$1
-  if ! pnpm list -g "$package" &>/dev/null; then
-    echo "Installing $package globally..."
-    pnpm add -g "$package"
-  else
-    echo "$package is already installed."
-  fi
-}
 echo "Installing global Node.js packages..."
-install_if_missing "live-server"
-install_if_missing "prettier"
-install_if_missing "eslint"
+pnpm add --global "live-server"
+pnpm add --global "prettier"
+pnpm add --global "eslint"
 
 # --- apply macOS preferences
 echo -e "${GREEN}->${RESET} Applying macOS preferences..."

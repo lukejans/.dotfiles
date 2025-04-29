@@ -1,4 +1,4 @@
-# Dotfiles
+# dotfiles
 
 > My MacOS setup
 
@@ -21,7 +21,7 @@
 
 ## Install
 
-Running the below command in your terminal will execute the [`verify_setup.sh`](./verify_setup.sh) install script which will verify the integrity of [`setup.sh`](./setup.sh) before executing the installation commands.
+Running the below command in your terminal will execute the [`verify_setup.sh`](./verify_setup.sh) script which will verify the integrity of [`setup.sh`](./setup.sh) before running the installation.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/verify_setup.sh | bash

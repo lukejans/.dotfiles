@@ -10,7 +10,7 @@
 #
 # see: https://github.com/yannbertrand/macos-defaults
 
-# --- General
+# --- general
 # save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 # automatically quit printer app once the print jobs complete
@@ -18,7 +18,7 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 # disable the “Are you sure you want to open this application?” dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# --- Dock
+# --- dock
 # enable auto-hide
 defaults write com.apple.dock "autohide" -bool "true"
 # change the dock size
@@ -45,7 +45,7 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 defaults write com.apple.dock wvous-br-corner -int 1
 defaults write com.apple.dock wvous-br-modifier -int 0
 
-# --- Finder
+# --- finder
 # display full POSIX path as window title
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 # show file extensions
@@ -73,26 +73,26 @@ defaults write NSGlobalDomain com.apple.springing.delay -float 0.15
 # keep folders on top when sorting by name
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
-# --- MenuBar
+# --- menubar
 # set flashing date time separators
 defaults write com.apple.menuextra.clock "FlashDateSeparators" -bool "true"
 # show passwords
 defaults write com.apple.Passwords "EnableMenuBarExtra" -bool "true"
 
-# --- Mouse
+# --- mouse
 # set mouse movement speed
 defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
 # enable three finger drag interactions
 defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
 
-# --- Keyboard
+# --- keyboard
 # enable full keyboard access for all controls (tab selection)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 # keyboard repeat
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
-# --- Screen
+# --- screen
 # require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
@@ -101,18 +101,16 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 defaults write NSGlobalDomain AppleFontSmoothing -int 1
 # enable HiDPI display modes
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
-
-# --- Screenshot App
 # save screenshots to ~/Pictures
 defaults write com.apple.screencapture "location" -string "${HOME}/Pictures"
 # save screenshots in PNG format
 defaults write com.apple.screencapture type -string "png"
 
-# --- Messages
+# --- messages
 # disable automatic emoji substitution
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
 
-# --- App Store
+# --- app store
 # enable the WebKit developer tools
 defaults write com.apple.appstore WebKitDeveloperExtras -bool true
 # enable the automatic update check
@@ -128,18 +126,18 @@ defaults write com.apple.commerce AutoUpdate -bool true
 # allow the App Store to reboot machine on macOS updates
 defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 
-# --- Time Machine
+# --- time machine
 # prevent time machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
-# --- Terminal ---
+# --- terminal
 # enable Secure Keyboard Entry in Terminal.app
 # see: https://security.stackexchange.com/a/47786/8918
 defaults write com.apple.terminal SecureKeyboardEntry -bool true
 # disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0
 
-# --- Mail
+# --- mail
 # disable send and reply animations in Mail.app
 defaults write com.apple.mail DisableReplyAnimations -bool true
 defaults write com.apple.mail DisableSendAnimations -bool true

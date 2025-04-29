@@ -181,6 +181,16 @@ install_if_missing "eslint"
 echo "${GREEN}->${RESET} Applying macOS preferences..."
 source "$DOTFILES_DIR/macos.sh"
 
+# --- add fonts to the font book
+if [ ! -d "$HOME/Library/Fonts" ]; then
+  echo "${GREEN}->${RESET} Creating user fonts directory..."
+  mkdir -p "$HOME/Library/Fonts"
+else
+  echo "User fonts directory already exists."
+  echo "${GREEN}->${RESET} Adding fonts to the font book..."
+  cp $DOTFILES_DIR/assets/fonts/*.ttf "$HOME/Library/Fonts/"
+fi
+
 # --- set zsh as default shell if it's not already
 if [[ "$SHELL" != *"zsh"* ]]; then
   echo "${GREEN}->${RESET} Setting Zsh as default shell..."

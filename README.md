@@ -24,7 +24,7 @@
 Running the below command in your terminal will execute the [setup.sh](./setup.sh) install script.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/verify_setup.sh | bash
 ```
 
 This script will confirm you want to proceed with the install before doing anything. If you confirm it will attempt to do the following:

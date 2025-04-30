@@ -4,232 +4,235 @@
 #
 # -- lukejans setup.sh
 
-# exit on error, unset variables, and pipe failures
-set -euo pipefail
+{ # this ensures the entire script is downloaded #
 
-# colors used
-GREEN="\033[1;32m"
-YELLOW="\033[1;33m"
-RED="\033[1;31m"
-MAGENTA="\033[1;35m"
-CYAN="\033[1;36m"
-RESET="\033[0m"
+  # exit on error, unset variables, and pipe failures
+  set -euo pipefail
 
-# print install banner
-echo
-echo -e "${GREEN}         .:'${RESET}"
-echo -e "${GREEN}     __ :'__${RESET}"
-echo -e "${YELLOW}  .'\`__\`-'__\`\`.${RESET}"
-echo -e "${RED} :__________.-'${RESET}  Running lukejans'"
-echo -e "${MAGENTA} :_________:${RESET}        macOS setup"
-echo -e "${CYAN}  :_________\`-;${RESET}"
-echo -e "${RESET}   \`.__.-.__.'${RESET}"
-echo
+  # colors used
+  RED="\033[1;31m"
+  GREEN="\033[1;32m"
+  YELLOW="\033[1;33m"
+  BLUE="\033[1;34m"
+  MAGENTA="\033[1;35m"
+  CYAN="\033[1;36m"
+  RESET="\033[0m"
 
-# confirm installation prompt
-echo "This script will: "
-echo "  - install additional software"
-echo "  - install lukejans' dotfiles"
-echo "  - setup your shell environment"
-echo
+  # print install banner
+  echo -e "\n${GREEN}         .:'${RESET}"
+  echo -e "${GREEN}     __ :'__${RESET}"
+  echo -e "${YELLOW}  .'\`__\`-'__\`\`.${RESET}"
+  echo -e "${RED} :__________.-'${RESET}  Running lukejans'"
+  echo -e "${MAGENTA} :_________:${RESET}        macOS setup"
+  echo -e "${MAGENTA}  :_________\`-;${RESET}"
+  echo -e "${BLUE}   \`.__.-.__.'${RESET}\n"
 
-read -p "Continue? (y/N) " -n 1 -r </dev/tty
+  # confirm installation prompt
+  echo "This script will: "
+  echo "  - install additional software"
+  echo "  - install lukejans' dotfiles"
+  echo "  - setup your shell environment"
+  echo
 
-echo
+  read -p "Continue? (y/N) " -n 1 -r </dev/tty
 
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo "Installation aborted."
-  exit 0
-fi
+  echo
 
-# sudo is required for some commands
-sudo -v
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Installation aborted."
+    exit 0
+  fi
 
-# keep sudo alive
-while true; do
-  sudo -n true
-  sleep 60
-  kill -0 "$$" || exit
-done 2>/dev/null &
+  # sudo is required for some commands
+  sudo -v
 
-# start an install timer
-start_time=$(date +%s)
+  # keep sudo alive
+  while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" || exit
+  done 2>/dev/null &
 
-# --- xcode command line tools
-if ! xcode-select -p &>/dev/null; then
-  echo -e "${GREEN}->${RESET} Installing Xcode command line tools..."
-  xcode-select --install
-  # loop until the installer has actually put the tools on disk
-  until xcode-select -p &>/dev/null; do
-    sleep 5
-  done
-fi
+  # start an install timer
+  start_time=$(date +%s)
 
-# --- homebrew
-if ! command -v brew &>/dev/null; then
-  echo -e "${GREEN}->${RESET} Installing \`\$ brew\`..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # --- xcode command line tools
+  if ! xcode-select -p &>/dev/null; then
+    echo -e "${GREEN}->${RESET} Installing Xcode command line tools..."
+    xcode-select --install
+    # loop until the installer has actually put the tools on disk
+    until xcode-select -p &>/dev/null; do
+      sleep 5
+    done
+  fi
 
-  # add Homebrew to PATH for the current session
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  # --- homebrew
+  if ! command -v brew &>/dev/null; then
+    echo -e "${GREEN}->${RESET} Installing \`\$ brew\`..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  # install git immediately to clone the dotfiles repo
-  echo -e "${GREEN}->${RESET} Installing git..."
-  brew install git
-fi
+    # add Homebrew to PATH for the current session
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# --- clone the most recent version of the .dotfiles repo
-DOTFILES_DIR="$HOME/.dotfiles"
-if [[ -d "$DOTFILES_DIR" ]]; then
-  echo -e "${GREEN}->${RESET} Dotfiles directory exists, updating..."
-  cd "$DOTFILES_DIR" && git pull
-else
-  echo -e "${GREEN}->${RESET} Downloading dotfiles repository..."
-  git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
-fi
+    # install git immediately to clone the dotfiles repo
+    echo -e "${GREEN}->${RESET} Installing git..."
+    brew install git
+  fi
 
-# --- install homebrew packages
-echo -e "${GREEN}->${RESET} Installing Homebrew packages from Brewfile..."
-brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
+  # --- clone the most recent version of the .dotfiles repo
+  DOTFILES_DIR="$HOME/.dotfiles"
+  if [[ -d "$DOTFILES_DIR" ]]; then
+    echo -e "${GREEN}->${RESET} Dotfiles directory exists, updating..."
+    cd "$DOTFILES_DIR" && git pull
+  else
+    echo -e "${GREEN}->${RESET} Downloading dotfiles repository..."
+    git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
+  fi
 
-# --- symlink general configuration files
-echo -e "${GREEN}->${RESET} Linking \`.config\` directory..."
-# check if .config directory exists and is not a symlink
-if [[ -d "$HOME/.config" && ! -L "$HOME/.config" ]]; then
-  echo "Backing up existing config directory to $HOME/.config.bak"
-  # if there is already a `.config.bak` folder move the old backup
-  # to the trash so we don't overwrite before creating a new backup
-  if [[ -d "$HOME/.config.bak" ]]; then
-    echo "Trashing existing backup..."
-    if command -v trash &>/dev/null; then
-      trash "$HOME/.config.bak"
-    else
-      mv "$HOME/.config.bak" "$HOME/.Trash"
+  # --- install homebrew packages
+  echo -e "${GREEN}->${RESET} Installing Homebrew packages from Brewfile..."
+  brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
+
+  # --- symlink general configuration files
+  echo -e "${GREEN}->${RESET} Linking \`.config\` directory..."
+  # check if .config directory exists and is not a symlink
+  if [[ -d "$HOME/.config" && ! -L "$HOME/.config" ]]; then
+    echo "Backing up existing config directory to $HOME/.config.bak"
+    # if there is already a `.config.bak` folder move the old backup
+    # to the trash so we don't overwrite before creating a new backup
+    if [[ -d "$HOME/.config.bak" ]]; then
+      echo "Trashing existing backup..."
+      if command -v trash &>/dev/null; then
+        trash "$HOME/.config.bak"
+      else
+        mv "$HOME/.config.bak" "$HOME/.Trash"
+      fi
     fi
+    # create the backup
+    mv "$HOME/.config" "$HOME/.config.bak"
+  elif [[ -L "$HOME/.config" ]]; then
+    # remove the old link
+    rm "$HOME/.config"
   fi
-  # create the backup
-  mv "$HOME/.config" "$HOME/.config.bak"
-elif [[ -L "$HOME/.config" ]]; then
-  # remove the old link
-  rm "$HOME/.config"
-fi
-# create the link for the entire `.config` directory
-ln -sf "$DOTFILES_DIR/.config" "$HOME/.config"
-echo -e "Linked \`.config\` directory to \`$HOME/.config\`"
+  # create the link for the entire `.config` directory
+  ln -sf "$DOTFILES_DIR/.config" "$HOME/.config"
+  echo -e "Linked \`.config\` directory to \`$HOME/.config\`"
 
-# --- symlink zsh configuration files
-echo -e "${GREEN}->${RESET} Linking zsh configuration files..."
-# Backup existing files if they're not symlinks
-for file in ".zshrc" ".zshenv" ".zprofile" ".profile"; do
-  if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
-    echo "Backing up existing $file to $HOME/${file}.bak"
-    mv "$HOME/$file" "$HOME/${file}.bak"
-  fi
-done
-ln -sf "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/.config/zsh/.zshenv" "$HOME/.zshenv"
-ln -sf "$DOTFILES_DIR/.config/zsh/.zprofile" "$HOME/.zprofile"
-ln -sf "$DOTFILES_DIR/.config/shell/.profile" "$HOME/.profile"
-echo "Linked zsh configuration files"
-
-# --- node
-# see: https://nodejs.org/en/download
-echo -e "${GREEN}->${RESET} Setting up Node.js environment..."
-# check and install nvm if needed
-if [[ ! -d "$HOME/.nvm" ]]; then
-  echo "Installing nvm..."
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-else
-  echo "nvm is already installed."
-fi
-
-# --- nvm
-# load nvm without restarting the shell
-export NVM_DIR="$HOME/.nvm"
-\. "$NVM_DIR/nvm.sh"
-# check if we have Node.js v22 installed
-if ! nvm ls 22 | grep -q "v22"; then
-  echo "Installing Node.js v22..."
-  nvm install 22
-else
-  echo "Node.js v22 is already installed."
-fi
-# make sure v22 is the default
-if [[ "$(nvm current)" != "v22"* ]]; then
-  echo "Setting Node.js v22 as default..."
-  nvm alias default 22
-  nvm use 22
-fi
-
-# --- pnpm
-# enable pnpm via corepack
-echo "Setting up pnpm via corepack..."
-corepack enable
-corepack prepare pnpm@latest --activate
-# setup pnpm home directory if not set
-if [[ -z "${PNPM_HOME:-}" ]]; then
-  echo "Setting up PNPM_HOME environment variable..."
-  export PNPM_HOME="/Users/lukejans/Library/pnpm"
-  case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-  esac
-else
-  echo "PNPM_HOME is already configured."
-fi
-# install global packages with pnpm
-echo "Installing global Node.js packages..."
-pnpm add --global "live-server"
-pnpm add --global "prettier"
-pnpm add --global "eslint"
-
-echo "Node.js environment:"
-echo "  - nvm version: $(nvm -v)"
-echo "  - node version: $(node -v)"
-echo "  - pnpm version: $(pnpm -v)"
-
-# --- apply macOS preferences
-echo -e "${GREEN}->${RESET} Applying macOS preferences..."
-source "$DOTFILES_DIR/macos.sh"
-
-# --- add fonts to the font book
-if [ ! -d "$HOME/Library/Fonts" ]; then
-  echo -e "${GREEN}->${RESET} Creating user fonts directory..."
-  mkdir -p "$HOME/Library/Fonts"
-else
-  echo "User fonts directory already exists."
-  echo -e "${GREEN}->${RESET} Adding fonts to the font book..."
-  cp $DOTFILES_DIR/assets/fonts/*.ttf "$HOME/Library/Fonts/"
-fi
-
-# --- set zsh as default shell if it's not already
-if [[ "$SHELL" != *"zsh"* ]]; then
-  echo -e "${GREEN}->${RESET} Setting Zsh as default shell..."
-  chsh -s "$(command -v zsh)"
-fi
-
-# end install timer
-end_time=$(date +%s)
-install_time=$((end_time - start_time))
-
-# --- installation complete info and restart prompt
-echo -e "\n${CYAN}Installation complete!${RESET}"
-echo -e "  - setup time: ${YELLOW}${install_time}s${RESET}"
-echo "  - todo: add java versions to jenv"
-echo "  - system restart required"
-read -p "Restart your computer now? (y/N) " -n 1 -r </dev/tty
-echo ""
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  # visual countdown
-  for i in {5..1}; do
-    echo -ne "\rRestarting in $i..."
-    sleep 1
+  # --- symlink zsh configuration files
+  echo -e "${GREEN}->${RESET} Linking zsh configuration files..."
+  # Backup existing files if they're not symlinks
+  for file in ".zshrc" ".zshenv" ".zprofile" ".profile"; do
+    if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
+      echo "Backing up existing $file to $HOME/${file}.bak"
+      mv "$HOME/$file" "$HOME/${file}.bak"
+    fi
   done
-  echo -e "\rRestarting now!"
+  ln -sf "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME/.zshrc"
+  ln -sf "$DOTFILES_DIR/.config/zsh/.zshenv" "$HOME/.zshenv"
+  ln -sf "$DOTFILES_DIR/.config/zsh/.zprofile" "$HOME/.zprofile"
+  ln -sf "$DOTFILES_DIR/.config/shell/.profile" "$HOME/.profile"
+  echo "Linked zsh configuration files"
 
-  # execute restart
-  sudo shutdown -r now
-else
-  echo -e "\nRestart cancelled!"
-  echo -e "Please restart manually at your convenience.\n "
-fi
+  # --- node
+  # see: https://nodejs.org/en/download
+  echo -e "${GREEN}->${RESET} Setting up Node.js environment..."
+  # check and install nvm if needed
+  if [[ ! -d "$HOME/.nvm" ]]; then
+    echo "Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+  else
+    echo "nvm is already installed."
+  fi
+
+  # --- nvm
+  # load nvm without restarting the shell
+  export NVM_DIR="$HOME/.nvm"
+  \. "$NVM_DIR/nvm.sh"
+  # check if we have Node.js v22 installed
+  if ! nvm ls 22 | grep -q "v22"; then
+    echo "Installing Node.js v22..."
+    nvm install 22
+  else
+    echo "Node.js v22 is already installed."
+  fi
+  # make sure v22 is the default
+  if [[ "$(nvm current)" != "v22"* ]]; then
+    echo "Setting Node.js v22 as default..."
+    nvm alias default 22
+    nvm use 22
+  fi
+
+  # --- pnpm
+  # enable pnpm via corepack
+  echo "Setting up pnpm via corepack..."
+  corepack enable
+  corepack prepare pnpm@latest --activate
+  # setup pnpm home directory if not set
+  if [[ -z "${PNPM_HOME:-}" ]]; then
+    echo "Setting up PNPM_HOME environment variable..."
+    export PNPM_HOME="/Users/lukejans/Library/pnpm"
+    case ":$PATH:" in
+    *":$PNPM_HOME:"*) ;;
+    *) export PATH="$PNPM_HOME:$PATH" ;;
+    esac
+  else
+    echo "PNPM_HOME is already configured."
+  fi
+  # install global packages with pnpm
+  echo "Installing global Node.js packages..."
+  pnpm add --global "live-server"
+  pnpm add --global "prettier"
+  pnpm add --global "eslint"
+
+  echo "Node.js environment:"
+  echo "  - nvm version: $(nvm -v)"
+  echo "  - node version: $(node -v)"
+  echo "  - pnpm version: $(pnpm -v)"
+
+  # --- apply macOS preferences
+  echo -e "${GREEN}->${RESET} Applying macOS preferences..."
+  source "$DOTFILES_DIR/macos.sh"
+
+  # --- add fonts to the font book
+  if [ ! -d "$HOME/Library/Fonts" ]; then
+    echo -e "${GREEN}->${RESET} Creating user fonts directory..."
+    mkdir -p "$HOME/Library/Fonts"
+  else
+    echo "User fonts directory already exists."
+    echo -e "${GREEN}->${RESET} Adding fonts to the font book..."
+    cp $DOTFILES_DIR/assets/fonts/*.ttf "$HOME/Library/Fonts/"
+  fi
+
+  # --- set zsh as default shell if it's not already
+  if [[ "$SHELL" != *"zsh"* ]]; then
+    echo -e "${GREEN}->${RESET} Setting Zsh as default shell..."
+    chsh -s "$(command -v zsh)"
+  fi
+
+  # end install timer
+  end_time=$(date +%s)
+  install_time=$((end_time - start_time))
+
+  # --- installation complete info and restart prompt
+  echo -e "\n${CYAN}Installation complete!${RESET}"
+  echo -e "  - setup time: ${YELLOW}${install_time}s${RESET}"
+  echo "  - todo: add java versions to jenv"
+  echo "  - system restart required"
+  read -p "Restart your computer now? (y/N) " -n 1 -r </dev/tty
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    # visual countdown
+    for i in {5..1}; do
+      echo -ne "\rRestarting in $i..."
+      sleep 1
+    done
+    echo -e "\rRestarting now!"
+
+    # execute restart
+    sudo shutdown -r now
+  else
+    echo -e "\nRestart cancelled!"
+    echo -e "Please restart manually at your convenience.\n "
+  fi
+
+} # this ensures the entire script is downloaded #

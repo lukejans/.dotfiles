@@ -21,13 +21,11 @@
 
 ## Install
 
-Running the below command in your terminal will execute the [`verify_setup.sh`](./verify_setup.sh) script which will verify the integrity of [`setup.sh`](./setup.sh) before running the installation.
-
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/verify_setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh | bash
 ```
 
-This script will confirm you want to proceed with the install before doing anything. If you confirm it will attempt to do the following:
+Running the above command in your terminal will execute the [`setup.sh`](./setup.sh) script and will do the following:
 
 - 🛠️ Install Xcode command line tools
 - 🍺 Install Homebrew & programs listed inside of [Brewfile](./Brewfile)
@@ -37,10 +35,8 @@ This script will confirm you want to proceed with the install before doing anyth
 - 📦 Install some npm packages
 - ✨ Set some MacOS system settings
 
-## ⚠️ Warnings
-
+>[!Caution]
 > **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
-
-- Use only on apple silicon Macs as I have not added checks for different homebrew paths.
-- I create backups of configurations this script replaces but in some cases an old `.config.bak` may end up in `~/.Trash`
-- `setup.sh` was written for the latest version of MacOS and may or may not work on earlier versions.
+> - This script should only be run on Apple Silicon Macs.
+> - Old configuration files with the `.bak` extension may end up in `~/.Trash`.
+> - `setup.sh` was only tested on MacOS Sequoia.

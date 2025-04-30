@@ -244,26 +244,28 @@ This script will:
   end_time=$(date +%s)
   install_time=$((end_time - start_time))
 
-  # --- installation complete info and restart prompt
+  # ---
+  # restart system
+  # ---
   echo -e "\n${cc}Installation complete!${r}"
-  echo -e "  - setup time: ${cy}${install_time}s${r}"
-  echo "  - todo: add java versions to jenv"
-  echo "  - system restart required"
-  read -p "Restart your computer now? (y/N) " -n 1 -r </dev/tty
-  echo ""
+  echo -e "  - ${cy}setup time${r}: ${install_time}s"
+  echo -e "  - ${cc}todo${r}: add java versions to jenv"
+  echo -e "  - ${cr}warn${r}: system restart required"
+  echo -e "${cc}${qmark}${r} Restart your computer now ${cc}(y/N)${r} \c"
+  read -n 1 -r </dev/tty
+  echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     # visual countdown
     for i in {5..1}; do
-      echo -ne "\rRestarting in $i..."
+      echo -ne "\r${cm}${arrow}${r}Restarting in $i..."
       sleep 1
     done
-    echo -e "\rRestarting now!"
-
+    echo "\rGoodBye!"
     # execute restart
     sudo shutdown -r now
   else
-    echo -e "\nRestart cancelled!"
-    echo -e "Please restart manually at your convenience.\n "
+    echo -e "${cc}${cross}${r} Restart cancelled!"
+    echo -e "Please restart manually at your convenience\!\n "
   fi
 
 } # this ensures the entire script is downloaded #

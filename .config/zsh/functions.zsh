@@ -115,7 +115,7 @@ function defaults_diff() {
 
   echo -e "\n\033[1;33m \033[0m Change settings and press any key to continue"
 
-  read -n 1 -s -r
+  read -s -k 1
   defaults read >diffs/$name/new.plist
   defaults -currentHost read >diffs/$name/host-new.plist
 

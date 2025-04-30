@@ -1,23 +1,23 @@
 [init]
 	defaultBranch = main
-
 [user]
 	name = Luke Janssen
 	email = 91230392+lukejans@users.noreply.github.com
-
+	signingkey = /Users/lukejans/.ssh/github_signing_ed25519.pub
 [color]
 	ui = auto
-
 [core]
 	excludesFile = /Users/lukejans/.config/git/gitignore_global
 	editor = zed --wait
-
 [merge]
-	ff = true
-
+	ff = only
 [alias]
 	lg = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'
 	lgl = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
 	uncommit = reset --soft HEAD~1
 	reword = commit --amend
 	oops = commit --amend --no-edit
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

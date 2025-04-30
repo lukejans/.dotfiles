@@ -34,7 +34,7 @@ ${cy}  .'\`__\`-'__\`\`.${r}
 ${cr} :__________.-'${r}  Running lukejans'
 ${cm} :_________:${r}        macOS setup
 ${cm}  :_________\`-;${r}
-${cb}   \`.__.-.__.\'${r}
+${cb}   \`.__.-.__.'${r}
 
 This script will:
   - install additional software

@@ -20,19 +20,21 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # --- dock
 # enable auto-hide
-defaults write com.apple.dock "autohide" -bool "true"
+defaults write com.apple.dock autohide -bool "true"
 # change the dock size
-defaults write com.apple.dock "tilesize" -int "36"
+defaults write com.apple.dock tilesize -int "36"
 # change hide / show animation speed
-defaults write com.apple.dock "autohide-time-modifier" -float "0.45"
+defaults write com.apple.dock autohide-time-modifier -float "0.45"
 # don't show recent apps
-defaults write com.apple.dock "show-recents" -bool "false"
+defaults write com.apple.dock show-recents -bool "false"
 # change the animation to scale
-defaults write com.apple.dock "mineffect" -string "scale"
+defaults write com.apple.dock mineffect -string "scale"
 # only show active apps
-defaults write com.apple.dock "static-only" -bool "true"
+defaults write com.apple.dock static-only -bool "true"
 # speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.1
+# enable grouping of applications in Mission Control
+defaults write com.apple.dock expose-group-apps -bool "true"
 # don't show indicator lights for open applications in the dock
 defaults write com.apple.dock show-process-indicators -bool false
 # hot corners (I hate hot corners)

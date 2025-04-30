@@ -5,12 +5,12 @@
 # |______|  functions.zsh
 
 # create a new directory and enter it
-function mkd() {
+mkd() {
   mkdir -p "$@" && cd "$_"
 }
 
 # fzf preview
-function fz() {
+fz() {
   fzf --style full \
     --border --padding 1,2 \
     --border-label ' Fzf Search ' \
@@ -36,7 +36,7 @@ function fz() {
 }
 
 # fzf preview and open a selected file in $EDITOR
-function fzo() {
+fzo() {
   local selected_file
   selected_file=$(fz)
   if [ -n "$selected_file" ]; then
@@ -45,7 +45,7 @@ function fzo() {
 }
 
 # yazi
-function y() {
+y() {
   local tmp
   tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
   yazi "$@" --cwd-file="$tmp"
@@ -56,7 +56,7 @@ function y() {
 }
 
 # git commit
-function gc() {
+gc() {
   if [ -z "$1" ]; then
     git commit
   else
@@ -65,12 +65,12 @@ function gc() {
 }
 
 # arduino uno compile
-function uno_compile() {
+uno_compile() {
   arduino-cli compile -v --fqbn arduino:avr:uno "$1"
 }
 
 # arduino uno upload
-function uno_upload() {
+uno_upload() {
   arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "$1"
 }
 
@@ -93,7 +93,7 @@ nvm_upgrade() {
 
 # workaround for `fast-syntax-highlighting` freezing when running `$ whatis`
 # see: https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27#issuecomment-1267278072
-function whatis() {
+whatis() {
   if [[ -v THEFD ]]; then
     :
   else
@@ -103,7 +103,7 @@ function whatis() {
 
 # find new MacOS defaults settings
 # see: https://github.com/yannbertrand/macos-defaults/tree/main
-function defaults_diff() {
+defaults_diff() {
   echo -n -e "\033[1m? Insert diff name (to store it for future usage)\033[0m "
   read name
   name=${name:-default}

@@ -36,8 +36,9 @@
   },
   // --- file associations
   "file_types": {
-    "Shell Script": [".env.*", ".zprofile"],
-    "Git Config": ["git/config"]
+    "Shell Script": [".env.*", "**/.zprofile"],
+    "Git Config": ["**/git/config"],
+    "Git Ignore": ["**/git/gitignore*"]
   },
   // --- ssh
   "ssh_connections": [],
@@ -53,10 +54,12 @@
     "edit_prediction_provider": "zed"
   },
   "edit_predictions": {
-    "disabled_globs": [".ssh/**"],
+    "disabled_globs": ["**/.ssh/**"],
     "mode": "subtle",
     "enabled_in_assistant": false
   },
+  // --- privacy
+  "private_files": ["**/.env*", "**/.ssh/**"],
   // --- journal
   "journal": {
     "path": "~/Notes",

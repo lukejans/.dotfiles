@@ -21,9 +21,9 @@
   cc="\033[1;36m" # cyan (uncommented this)
   r="\033[0m"     # reset
   # symbols
-  arrow='\u2192'
-  check='\u2713'
-  cross='\u2717'
+  arrow='➜'
+  check='✓'
+  cross='✗'
   qmark='?'
 
   # print install banner
@@ -45,7 +45,8 @@ This script will:
   # ---
   # confirm installation
   # ---
-  read -p "${cc}${qmark}${r} Continue ${cc}(y/N)${r} " -n 1 -r </dev/tty
+  echo -e "${cc}${qmark}${r} Continue ${cc}(y/N)${r} \c"
+  read -n 1 -r </dev/tty
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     # abort install

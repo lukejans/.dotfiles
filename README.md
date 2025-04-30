@@ -31,12 +31,12 @@ Running the above command in your terminal will execute the [`setup.sh`](./setup
 - 🍺 Install Homebrew & programs listed inside of [Brewfile](./Brewfile)
 - 😊 Download This repo to `$HOME/.dotfiles`
 - 🔗 Symlink config files to `$HOME` and `$HOME/.config`
-- 🌱 Setup a Node.js environment (v22.xx.x), (`nvm`, `pnpm`)
-- 📦 Install some npm packages
-- ✨ Set some MacOS system settings
+- 🌱 Setup a Node.js environment (v22) with `nvm` and `pnpm`
+- 📦 Install some global npm packages
+- ✨ Set some MacOS system settings / preferences
 
 >[!Caution]
 > **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
 > - This script should only be run on Apple Silicon Macs.
-> - Old configuration files with the `.bak` extension may end up in `~/.Trash`.
+> - Old configuration files will be backed up to `"$HOME$filename$(date +%c).bak"`.
 > - `setup.sh` was only tested on MacOS Sequoia.

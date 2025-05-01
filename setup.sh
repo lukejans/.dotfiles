@@ -236,7 +236,7 @@ This script will:
   else
     echo "User fonts directory already exists."
   fi
-  cp "$DOTFILES_DIR/assets/fonts/*.ttf" "$HOME/Library/Fonts/"
+  cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
   echo -e "${cg}${check}${r} Fonts copied to user fonts directory."
 
   # ---

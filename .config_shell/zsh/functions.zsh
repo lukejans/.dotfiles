@@ -83,31 +83,3 @@ whatis() {
     command whatis "$@"
   fi
 }
-
-# find new MacOS defaults settings
-# see: https://github.com/yannbertrand/macos-defaults/tree/main
-defaults_diff() {
-  echo -n -e "\033[1m? Insert diff name (to store it for future usage)\033[0m "
-  read name
-  name=${name:-default}
-  echo "Saving plist files to '$(pwd)/diffs/${name}' folder."
-
-  mkdir -p diffs/$name
-  defaults read >diffs/$name/old.plist
-  defaults -currentHost read >diffs/$name/host-old.plist
-
-  echo -e "\n\033[1;33m \033[0m Change settings and press any key to continue"
-
-  read -s -k 1
-  defaults read >diffs/$name/new.plist
-  defaults -currentHost read >diffs/$name/host-new.plist
-
-  echo -e "\033[1;32m->\033[0m Here is your diff\n\n"
-  git --no-pager diff --no-index diffs/$name/old.plist diffs/$name/new.plist
-  echo -e '\n\n\033[1;32m->\033[0m and here with the `-currentHost` option\n\n'
-  git --no-pager diff --no-index diffs/$name/host-old.plist diffs/$name/host-new.plist
-
-  echo -e "\n\n\033[1;32m->\033[0m Commands to print the diffs again"
-  echo -e "$ git --no-pager diff --no-index diffs/${name}/old.plist diffs/${name}/new.plist"
-  echo -e "$ git --no-pager diff --no-index diffs/${name}/host-old.plist diffs/${name}/host-new.plist"
-}

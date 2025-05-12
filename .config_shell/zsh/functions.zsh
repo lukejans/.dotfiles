@@ -74,23 +74,6 @@ uno_upload() {
   arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "$1"
 }
 
-# upgrade nvm
-nvm_upgrade() {
-  # start timer to track upgrade time
-  start_time=$(date +%s)
-  # official nvm manual upgrade
-  (
-    cd "$NVM_DIR"
-    git fetch --tags origin
-    git checkout "$(git describe --abbrev=0 --tags --match 'v[0-9]*' "$(git rev-list --tags --max-count=1)")"
-  ) && \. "$NVM_DIR/nvm.sh"
-  # end timer
-  end_time=$(date +%s)
-  # calculate elapsed time (seconds)
-  elapsed_time=$((end_time - start_time))
-  echo "Time taken to upgrade nvm: ${elapsed_time} seconds"
-}
-
 # workaround for `fast-syntax-highlighting` freezing when running `$ whatis`
 # see: https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27#issuecomment-1267278072
 whatis() {

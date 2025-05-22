@@ -31,6 +31,9 @@
     "minimap": {
         "show": "always"
     },
+    "git_panel": {
+        "status_style": "label_color"
+    },
     // --- ui
     "tabs": {
         "file_icons": true,

@@ -28,6 +28,9 @@
     "diagnostics": {
         "include_warnings": true
     },
+    "minimap": {
+        "show": "always"
+    },
     // --- ui
     "tabs": {
         "file_icons": true,
